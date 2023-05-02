@@ -1,3 +1,5 @@
+// This folder will declare the routes for the backend APIs
+
 var express = require('express');
 var router = express.Router();
 
