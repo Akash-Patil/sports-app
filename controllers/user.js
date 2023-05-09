@@ -2,25 +2,27 @@
 // Right now, contains APIS from the odds API (Rapid API)
 
 const conf = require('../config/config.js')
-const axios = requrie('axios').default;
+const axios = require('axios').default;
 require('dotenv').config();
 
 const odds = {};
 
-odds.getSports = () => {
+odds.getSports = async () => {
     return new Promise((resolve, reject) => {
         return axios
             .get(
                 conf.oddsConf.baseUrl + `/v4/sports/?apiKey=${process.env.ODDS_API_TOKEN}`
+                //`https://api.the-odds-api.com/v4/sports/?apiKey=595035ac2a5b826fc3881212c7e5b3fd`
             )
             .then(resp => {
-                resolve(resp)
+                //console.log(process.env.ODDS_API_TOKEN)
+                resolve(resp.data)
             })
             .catch(err => reject(err))
     })
 }
 
-odds.getOdds = (sport, regions, markets, oddsFormat) => {
+odds.getOdds = async (sport, regions, markets, oddsFormat) => {
     return new Promise((resolve, reject) => {
         return axios
             .get(conf.oddsConf.baseUrl + `/v4/sports/${sport}/odds/?apiKey=${process.env.ODDS_API_TOKEN}
@@ -33,7 +35,7 @@ odds.getOdds = (sport, regions, markets, oddsFormat) => {
     })
 }
 
-odds.getScores = (sport, daysFrom) => {
+odds.getScores = async (sport, daysFrom) => {
     return new Promise((reject, resolve) => {
         return axios
             .get(
@@ -48,5 +50,10 @@ odds.getScores = (sport, daysFrom) => {
 }
 
 
-module.exports.odds = odds;
+module.exports = odds; // be careful with the module.exports
+
+// Here we are exporting the odds{} object without binding it to a .odds that
+//would have to be called during importing
+
+// module.exports always exports as an object
 
